@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const process = require('process');
 
-const { PORT = 3000, BASE_PATH } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 process.on('uncaughtException', (err, origin) => {
@@ -33,6 +33,5 @@ app.use('*', (req,res,next) => {
   res.status(404).send('url not found');
 });
 app.listen(PORT, () => {
-  console.log('Ссылка на сервер');
-  console.log(BASE_PATH);
+  console.log('Server is working! Port: ' + PORT);
 });
