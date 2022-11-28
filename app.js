@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 });
 app.use('/cards', require('./routes/cards'));
 app.use('/users', require('./routes/users'));
-app.use('*', (req,res,next) => {
+app.use('*', (req, res, next) => {
   res.status(404).send('url not found');
 });
 app.listen(PORT, () => {
