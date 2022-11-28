@@ -39,7 +39,12 @@ module.exports.likeCard = (req, res) => {
   const { cardId } = req.params;
 
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true, runValidators: true })
-    .then(card => res.send({ data: card }))
+    .then(card => {
+      if (!card) {
+        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
+      }
+      res.send({ data: card });
+    })
     .catch(err => {
       if (err.path == '_id') {
         return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
@@ -55,7 +60,12 @@ module.exports.dislikeCard = (req, res) => {
   const { cardId } = req.params;
 
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true, runValidators: true })
-    .then(card => res.send({ data: card }))
+    .then(card => {
+      if (!card) {
+        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
+      }
+      res.send({ data: card })
+    })
     .catch(err => {
       if (err.path == '_id') {
         return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });

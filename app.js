@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.use('/cards', require('./routes/cards'));
 app.use('/users', require('./routes/users'));
 app.use('*', (req, res, next) => {
-  res.status(404).send('url not found');
+  res.status(404).send({ message: 'url not found' });
 });
 app.listen(PORT, () => {
   console.log('Server is working! Port: ' + PORT);
