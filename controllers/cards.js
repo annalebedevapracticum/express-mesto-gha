@@ -25,13 +25,14 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
 
   Card.findByIdAndRemove(cardId)
-    .then(card => res.send({ data: card }))
-    .catch(err => {
+    .then(card => {
       if (err.path == '_id') {
         return res.status(404).send({ message: 'Карточка с указанным _id не найдена' });
       }
-
-      res.status(500).send({ message: err.message });
+      res.send({ data: card })
+    })
+    .catch(err => {
+      return res.status(400).send({ message: 'Карточка с указанным _id не найдена' });
     });
 };
 
@@ -46,13 +47,7 @@ module.exports.likeCard = (req, res) => {
       res.send({ data: card });
     })
     .catch(err => {
-      if (err.path == '_id') {
-        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
-      }
-      if (err.path == 'likes') {
-        return res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка.' });
-      }
-      res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка.' });
     });
 };
 
@@ -67,12 +62,6 @@ module.exports.dislikeCard = (req, res) => {
       res.send({ data: card })
     })
     .catch(err => {
-      if (err.path == '_id') {
-        return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
-      }
-      if (err.path == 'likes') {
-        return res.status(400).send({ message: 'Переданы некорректные данные для снятия лайка.' });
-      }
-      res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: 'Переданы некорректные данные для снятия лайка.' });
     });
 };

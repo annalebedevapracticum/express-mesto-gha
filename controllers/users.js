@@ -19,11 +19,7 @@ module.exports.getUser = (req, res) => {
       res.send({ data: user });
     })
     .catch(err => {
-      if (err.path == '_id') {
-        return res.status(400).send({ message: 'Пользователь не найден' });
-      }
-
-      res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: 'Пользователь не найден' });
     });
 };
 
@@ -34,11 +30,7 @@ module.exports.createUser = (req, res) => {
       res.send({ data: user });
     })
     .catch(err => {
-      console.log(err.name);
-      if (err._message == 'user validation failed') {
-        return res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя.' });
-      }
-      res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя.' });
     });
 };
 
@@ -52,13 +44,7 @@ module.exports.updateUser = (req, res) => {
       res.send({ data: user })
     })
     .catch(err => {
-      if (err.path == '_id') {
-        return res.status(400).send({ message: 'Пользователь не найден' });
-      }
-      if (err._message == 'Validation failed') {
-        return res.status(400).send({ message: 'Переданы некорректные данные при обновлении пользователя.' });
-      }
-      res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: 'Переданы некорректные данные при обновлении пользователя.' });
     });
 };
 
@@ -72,13 +58,7 @@ module.exports.updateAvatar = (req, res) => {
       res.send({ data: user })
     })
     .catch(err => {
-      if (err.path == '_id') {
-        return res.status(404).send({ message: 'Пользователь не найден' });
-      }
-      if (err._message == 'Validation failed') {
-        return res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
-      }
-      res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
     });
 };
 
