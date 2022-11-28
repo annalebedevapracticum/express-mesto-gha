@@ -26,10 +26,10 @@ module.exports.deleteCard = (req, res) => {
 
   Card.findByIdAndRemove(cardId)
     .then(card => {
-      if (err.path == '_id') {
+      if (!card) {
         return res.status(404).send({ message: 'Карточка с указанным _id не найдена' });
       }
-      res.send({ data: card })
+      res.send({ data: card });
     })
     .catch(err => {
       return res.status(400).send({ message: 'Карточка с указанным _id не найдена' });
