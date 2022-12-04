@@ -14,24 +14,25 @@ app.use(bodyParser.json());
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-}, err => {
+  useUnifiedTopology: true,
+}, (err) => {
   if (err) throw err;
-  console.log('Connected to MongoDB!!!')
+  console.log('Connected to MongoDB!!!');
 });
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '6383a5d05b0bcb685ab005fa'
+    _id: '6383a5d05b0bcb685ab005fa',
   };
 
   next();
 });
 app.use('/cards', require('./routes/cards'));
 app.use('/users', require('./routes/users'));
-app.use('*', (req, res, next) => {
+
+app.use('*', (req, res) => {
   res.status(404).send({ message: 'url not found' });
 });
 app.listen(PORT, () => {
-  console.log('Server is working! Port: ' + PORT);
+  console.log(`Server is working! Port: ${PORT}`);
 });

@@ -10,6 +10,13 @@
     "ecmaVersion": "latest"
   },
   "rules": {
-    "no-underscore-dangle": "allow"
+    "no-underscore-dangle": [
+      "off",
+      {
+        "allow": [
+          "id"
+        ]
+      }
+    ]
   }
 }
