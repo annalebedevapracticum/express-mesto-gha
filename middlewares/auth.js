@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-const secretKey = 'secret_key';
+const { NODE_ENV, JWT_SECRET } = process.env;
+
+const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
 
 function generateToken(payload) {
   return jwt.sign(payload, secretKey, { expiresIn: '7d' });
@@ -18,7 +20,7 @@ function checkToken(token) {
 }
 
 function checkAuth(req, res, next) {
-  const token = req.headers.authorization;
+  const token = req.headers.authorization || req.cookies.jwt;
   const tokenPayload = checkToken(token);
   if (tokenPayload) {
     req.user = tokenPayload;

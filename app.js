@@ -1,6 +1,8 @@
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const { errors, celebrate, Joi } = require('celebrate');
 const process = require('process');
 const { login, createUser } = require('./controllers/users');
@@ -15,6 +17,7 @@ process.on('uncaughtException', (err, origin) => {
 });
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,

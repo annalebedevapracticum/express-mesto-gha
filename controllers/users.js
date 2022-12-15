@@ -44,6 +44,7 @@ module.exports.createUser = (req, res, next) => {
           email: user.email,
           name,
           about,
+          avatar,
         });
       })
       .catch((err) => {
@@ -97,7 +98,12 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = generateToken({ _id: user._id });
-      res.send({ token });
+      res
+        .cookie('jwt', token, {
+          maxAge: 3600000,
+          httpOnly: true,
+          sameSite: true,
+        }).send({ token });
     })
     .catch((err) => {
       throw new CustomError(err.message, 401);
