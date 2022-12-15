@@ -19,7 +19,7 @@ router.patch('/me', celebrate({
 }), updateUser);
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    link: Joi.string(),
+    link: Joi.string().uri(),
   }).unknown(true),
 }), updateAvatar);
 
