@@ -3,6 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const {
   getUser, getUsers, updateAvatar, updateUser,
 } = require('../controllers/users');
+const { urlRegex } = require('../helpers/utils');
 
 router.get('/', getUsers);
 router.get('/me', getUser);
@@ -19,7 +20,7 @@ router.patch('/me', celebrate({
 }), updateUser);
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    link: Joi.string().uri(),
+    link: Joi.string().regex(urlRegex),
   }).unknown(true),
 }), updateAvatar);
 

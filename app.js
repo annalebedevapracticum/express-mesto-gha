@@ -5,6 +5,7 @@ const { errors, celebrate, Joi } = require('celebrate');
 const process = require('process');
 const { login, createUser } = require('./controllers/users');
 const { checkAuth } = require('./middlewares/auth');
+const { urlRegex } = require('./helpers/utils');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -38,7 +39,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(8),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().uri(),
+    avatar: Joi.string().regex(urlRegex),
   }).unknown(true),
 }), createUser);
 
