@@ -1,7 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors, celebrate, Joi } = require('celebrate');
 const process = require('process');
+const { login, createUser } = require('./controllers/users');
+const { checkAuth } = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -20,19 +23,32 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   console.log('Connected to MongoDB!!!');
 });
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6383a5d05b0bcb685ab005fa',
-  };
+app.use('/cards', checkAuth, require('./routes/cards'));
+app.use('/users', checkAuth, require('./routes/users'));
 
-  next();
-});
-app.use('/cards', require('./routes/cards'));
-app.use('/users', require('./routes/users'));
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8),
+  }),
+}), createUser);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'url not found' });
 });
 app.listen(PORT, () => {
   console.log(`Server is working! Port: ${PORT}`);
+});
+
+app.use(errors());
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).send({ message: err.message });
+  next();
 });
