@@ -1,4 +1,4 @@
-const urlRegex = /http?s:\/\/(www)?\S/;
+const urlRegex = /^http?s:\/\/(www)?\S/;
 
 module.exports = {
   urlRegex,
