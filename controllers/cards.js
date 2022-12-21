@@ -28,9 +28,6 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card) {
         throw new CustomError('Карточка с указанным _id не найдена', 404);
       }
-      if (card.owner._id !== req.user._id) {
-        throw new CustomError('Доступ запрещен', 403);
-      }
       return res.send({ data: card });
     })
     .catch((err) => {
