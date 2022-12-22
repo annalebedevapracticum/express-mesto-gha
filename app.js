@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const process = require('process');
 const routes = require('./routes/index');
+const { handleErrors } = require('./middlewares/handleErrors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -32,8 +33,4 @@ app.listen(PORT, () => {
 });
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const errorStatus = err.status || 500;
-  res.status(errorStatus).send({ message: errorStatus === 500 ? 'На сервере произошла ошибка' : err.message });
-  next();
-});
+app.use(handleErrors);
