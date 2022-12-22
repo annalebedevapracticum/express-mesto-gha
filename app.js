@@ -8,6 +8,7 @@ const process = require('process');
 const { login, createUser } = require('./controllers/users');
 const { checkAuth } = require('./middlewares/auth');
 const { urlRegex } = require('./helpers/utils');
+const CustomError = require('./helpers/CustomError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -33,22 +34,20 @@ app.use('/users', checkAuth, require('./routes/users'));
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }).unknown(true),
+    password: Joi.string().required(),
+  }),
 }), login);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().regex(urlRegex),
-  }).unknown(true),
+  }),
 }), createUser);
 
-app.use('*', (req, res) => {
-  res.status(404).send({ message: 'url not found' });
-});
+app.use('*', checkAuth, (req, res, next) => next(new CustomError('url not found', 404)));
 app.listen(PORT, () => {
   console.log(`Server is working! Port: ${PORT}`);
 });
@@ -56,6 +55,7 @@ app.listen(PORT, () => {
 app.use(errors());
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500).send({ message: err.message });
+  const errorStatus = err.status || 500;
+  res.status(errorStatus).send({ message: errorStatus === 500 ? 'На сервере произошла ошибка' : err.message });
   next();
 });

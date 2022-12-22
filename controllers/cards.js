@@ -14,31 +14,33 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new CustomError('Переданы некорректные данные при создании карточки', 400);
+        next(new CustomError('Переданы некорректные данные при создании карточки', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };
 
 module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId)
+    .orFail(() => {
+      throw new CustomError('Карточка с указанным _id не найдена', 404);
+    })
     .then((card) => {
-      if (!card) {
-        throw new CustomError('Карточка с указанным _id не найдена', 404);
-      }
       if (card.owner.toString() !== req.user._id) {
         throw new CustomError('Доступ запрещен', 403);
       }
-      return res.send({ data: card });
+      return card.remove().then(() => {
+        res.send({ data: card });
+      });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new CustomError('Карточка с указанным _id не найдена', 400);
+        next(new CustomError('Карточка с указанным _id не найдена', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };
 
 module.exports.likeCard = (req, res, next) => {
@@ -53,10 +55,10 @@ module.exports.likeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new CustomError('Переданы некорректные данные для постановки лайка.', 400);
+        next(new CustomError('Переданы некорректные данные для постановки лайка.', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };
 
 module.exports.dislikeCard = (req, res, next) => {
@@ -71,8 +73,8 @@ module.exports.dislikeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new CustomError('Переданы некорректные данные для снятия лайка.', 400);
+        next(new CustomError('Переданы некорректные данные для снятия лайка.', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };

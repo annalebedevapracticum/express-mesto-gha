@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const CustomError = require('../helpers/CustomError');
 
 // const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -26,7 +27,7 @@ function checkAuth(req, res, next) {
     req.user = tokenPayload;
     return next();
   }
-  return res.status(401).json({ message: 'Доступ запрещен' });
+  return next(new CustomError('Доступ запрещен', 401));
 }
 
 module.exports = {

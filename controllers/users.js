@@ -24,10 +24,10 @@ module.exports.getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new CustomError('Пользователь не найден', 400);
+        next(new CustomError('Пользователь не найден', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -49,13 +49,13 @@ module.exports.createUser = (req, res, next) => {
       })
       .catch((err) => {
         if (err.code === 11000) {
-          throw new CustomError('Такой пользователь уже существует', 409);
+          next(new CustomError('Такой пользователь уже существует', 409));
         }
         if (err.name === 'ValidationError') {
-          throw new CustomError('Переданы некорректные данные при создании пользователя.', 400);
+          next(new CustomError('Переданы некорректные данные при создании пользователя.', 400));
         }
-        throw err;
-      })).catch(next);
+        next(err);
+      }));
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -69,10 +69,10 @@ module.exports.updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new CustomError('Переданы некорректные данные при обновлении пользователя.', 400);
+        next(new CustomError('Переданы некорректные данные при обновлении пользователя.', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };
 
 module.exports.updateAvatar = (req, res, next) => {
@@ -86,10 +86,10 @@ module.exports.updateAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new CustomError('Переданы некорректные данные при обновлении аватара.', 400);
+        next(new CustomError('Переданы некорректные данные при обновлении аватара.', 400));
       }
-      throw err;
-    }).catch(next);
+      next(err);
+    });
 };
 
 module.exports.login = (req, res, next) => {
@@ -106,6 +106,6 @@ module.exports.login = (req, res, next) => {
         }).send({ token });
     })
     .catch((err) => {
-      throw new CustomError(err.message, 401);
-    }).catch(next);
+      next(new CustomError(err.message, 401));
+    });
 };
