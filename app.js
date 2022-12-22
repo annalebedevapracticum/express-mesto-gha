@@ -25,11 +25,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   console.log('Connected to MongoDB!!!');
 });
 
+app.use(routes);
+
 app.listen(PORT, () => {
   console.log(`Server is working! Port: ${PORT}`);
 });
 app.use(errors());
-app.use(routes);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;

@@ -23,6 +23,9 @@ router.post('/signup', celebrate({
     avatar: Joi.string().regex(urlRegex),
   }),
 }), createUser);
+router.get('/signout', (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Выход' });
+});
 
 router.use('*', checkAuth, (req, res, next) => next(new CustomError('url not found', 404)));
 
