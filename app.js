@@ -10,7 +10,7 @@ const routes = require('./routes/index');
 const { handleErrors } = require('./middlewares/handleErrors');
 // const { corsMiddlewar } = require('./middlewares/cors');
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 process.on('uncaughtException', (err, origin) => {
