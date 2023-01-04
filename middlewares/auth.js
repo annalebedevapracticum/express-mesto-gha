@@ -21,7 +21,7 @@ function checkToken(token) {
 }
 
 function checkAuth(req, res, next) {
-  const token = req.cookies.jwt;
+  const token = req.headers.authorization || req.cookies.jwt;
   const tokenPayload = checkToken(token);
   if (tokenPayload) {
     req.user = tokenPayload;
