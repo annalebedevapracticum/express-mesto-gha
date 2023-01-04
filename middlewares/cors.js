@@ -1,9 +1,9 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  'http://lebedeva.nomoredomains.club/',
-  'https://lebedeva.nomoredomains.club/',
-  'http://lebedeva.back.nomoredomains.club/',
-  'https://lebedeva.back.nomoredomains.club/',
+  'http://lebedeva.nomoredomains.club',
+  'https://lebedeva.nomoredomains.club',
+  'http://lebedeva.back.nomoredomains.club',
+  'https://lebedeva.back.nomoredomains.club',
   'http://localhost:3000',
 ];
 
