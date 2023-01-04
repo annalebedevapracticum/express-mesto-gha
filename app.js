@@ -9,13 +9,14 @@ const routes = require('./routes/index');
 const { handleErrors } = require('./middlewares/handleErrors');
 const { corsMiddlewar } = require('./middlewares/cors');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 const app = express();
 
 process.on('uncaughtException', (err, origin) => {
   console.log(`${origin} ${err.name} c текстом ${err.message} не была обработана. Обратите внимание!`);
 });
 
+app.use(corsMiddlewar);
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -27,7 +28,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   console.log('Connected to MongoDB!!!');
 });
 
-app.use(corsMiddlewar);
 app.use(routes);
 
 app.listen(PORT, () => {
