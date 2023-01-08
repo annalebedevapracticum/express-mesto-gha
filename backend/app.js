@@ -8,7 +8,7 @@ const { errors } = require('celebrate');
 const process = require('process');
 const routes = require('./routes/index');
 const { handleErrors } = require('./middlewares/handleErrors');
-// const { corsMiddlewar } = require('./middlewares/cors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -29,7 +29,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   console.log('Connected to MongoDB!!!');
 });
 
+app.use(requestLogger);
 app.use(routes);
+app.use(errorLogger);
 
 app.listen(PORT, () => {
   console.log(`Server is working! Port: ${PORT}`);
