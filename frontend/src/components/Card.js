@@ -5,7 +5,7 @@ function Card({ link, name, likes, owner, onImageClick, onCardLike, onCardDelete
     const { currentUser } = React.useContext(CurrentUserContext);
     const isLiked = likes.some(item => item === currentUser._id)
 
-    const isOwner = owner._id === currentUser._id;
+    const isOwner = owner === currentUser._id;
     return (
         <div className="card">
             <img className="card__image" alt="Картинка" src={link} onClick={() => onImageClick({ link, name })} />
